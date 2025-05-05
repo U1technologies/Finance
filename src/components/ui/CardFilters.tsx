@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Filter, Search, X } from 'lucide-react';
 
 interface FiltersProps {
@@ -10,16 +10,32 @@ interface FiltersProps {
     search?: string;
   }) => void;
   banks: string[];
+  initialFilters?: {
+    bank?: string;
+    fee?: string;
+    rewards?: string;
+    search?: string;
+  };
 }
 
-const CardFilters: React.FC<FiltersProps> = ({ onFilterChange, banks }) => {
+const CardFilters: React.FC<FiltersProps> = ({ onFilterChange, banks, initialFilters = {} }) => {
   const [filters, setFilters] = useState({
     bank: '',
     fee: '',
     rewards: '',
     search: '',
+    ...initialFilters
   });
   const [filtersVisible, setFiltersVisible] = useState(false);
+
+  useEffect(() => {
+    setFilters({
+      bank: initialFilters.bank || '',
+      fee: initialFilters.fee || '',
+      rewards: initialFilters.rewards || '',
+      search: initialFilters.search || '',
+    });
+  }, [initialFilters]);
 
   const handleFilterChange = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -46,7 +62,7 @@ const CardFilters: React.FC<FiltersProps> = ({ onFilterChange, banks }) => {
   };
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 bg-white p-6 rounded-lg shadow-soft">
       {/* Search Bar */}
       <div className="relative mb-4">
         <input
@@ -55,7 +71,7 @@ const CardFilters: React.FC<FiltersProps> = ({ onFilterChange, banks }) => {
           value={filters.search}
           onChange={handleFilterChange}
           placeholder="Search credit cards..."
-          className="form-input-premium pl-10"
+          className="form-input-premium pl-10 w-full"
         />
         <Search className="absolute left-3 top-3 h-5 w-5 text-slate" />
       </div>

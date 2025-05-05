@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 
 interface CategoryCardProps {
   title: string;
@@ -22,14 +23,17 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   return (
     <Link to={path}>
       <Card className={cn("overflow-hidden h-full transition-all duration-300 hover:shadow-gold-glow border-transparent hover:border-gold/30", className)}>
-        <div className="relative h-44 overflow-hidden">
+        <div className="relative h-44 overflow-hidden group">
           <img 
             src={image} 
             alt={title} 
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent"></div>
           <h3 className="absolute bottom-4 left-4 text-xl font-semibold text-white">{title}</h3>
+          <div className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-teal flex items-center justify-center opacity-0 transform translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+            <ArrowRight className="h-4 w-4 text-white" />
+          </div>
         </div>
         <CardContent className="p-4">
           <p className="text-slate text-sm">{description}</p>

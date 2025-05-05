@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Layout from "../components/layout/Layout";
 import CreditCard from "../components/ui/CreditCard";
@@ -5,6 +6,7 @@ import CardFilters from "../components/ui/CardFilters";
 import CardCategories from "../components/ui/CardCategories";
 import CardComparison from "../components/ui/CardComparison";
 import { ArrowRight } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 // Sample credit card data
 const allCards = [
@@ -114,11 +116,36 @@ const allCards = [
 ];
 
 const CreditCards = () => {
+  const [searchParams] = useSearchParams();
   const [filteredCards, setFilteredCards] = useState(allCards);
   const [loading, setLoading] = useState(false);
+  const [initialFilters, setInitialFilters] = useState({
+    bank: '',
+    fee: '',
+    rewards: '',
+    search: '',
+  });
 
   // Extract unique banks for filter
   const banks = [...new Set(allCards.map(card => card.bank))];
+
+  // Set initial filters based on URL parameters
+  useEffect(() => {
+    const rewards = searchParams.get('rewards');
+    const fee = searchParams.get('fee');
+    const bank = searchParams.get('bank');
+    const search = searchParams.get('search');
+
+    const newFilters = {
+      rewards: rewards || '',
+      fee: fee || '',
+      bank: bank || '',
+      search: search || '',
+    };
+
+    setInitialFilters(newFilters);
+    handleFilterChange(newFilters);
+  }, [searchParams]);
 
   // Handle filter changes
   const handleFilterChange = (filters: any) => {
@@ -186,7 +213,7 @@ const CreditCards = () => {
           <CardComparison allCards={allCards} />
           
           {/* Filters */}
-          <CardFilters onFilterChange={handleFilterChange} banks={banks} />
+          <CardFilters onFilterChange={handleFilterChange} banks={banks} initialFilters={initialFilters} />
           
           {/* Results */}
           <div className="mb-4 flex justify-between items-center">
