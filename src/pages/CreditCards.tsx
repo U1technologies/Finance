@@ -1,8 +1,9 @@
-
 import React, { useState, useEffect } from "react";
 import Layout from "../components/layout/Layout";
 import CreditCard from "../components/ui/CreditCard";
 import CardFilters from "../components/ui/CardFilters";
+import CardCategories from "../components/ui/CardCategories";
+import CardComparison from "../components/ui/CardComparison";
 import { ArrowRight } from "lucide-react";
 
 // Sample credit card data
@@ -18,7 +19,10 @@ const allCards = [
     rating: 4.8,
     featured: true,
     category: "cashback",
-    feeType: "high"
+    feeType: "high",
+    rewardRate: "5%",
+    processingFee: "₹999",
+    creditScore: "750+"
   },
   {
     id: "travel-elite",
@@ -30,7 +34,10 @@ const allCards = [
     rewards: "4x Travel Miles",
     rating: 4.6,
     category: "travel",
-    feeType: "medium"
+    feeType: "medium",
+    rewardRate: "4x Miles",
+    processingFee: "₹750",
+    creditScore: "700+"
   },
   {
     id: "platinum-lifestyle",
@@ -165,9 +172,19 @@ const CreditCards = () => {
         </div>
       </section>
 
+      {/* Categories Section */}
+      <section className="py-10 bg-white border-b border-gray-dark/10">
+        <div className="container-wide">
+          <CardCategories />
+        </div>
+      </section>
+
       {/* Card Listing Section */}
       <section className="py-12 bg-gray">
         <div className="container-wide">
+          {/* Comparison Feature */}
+          <CardComparison allCards={allCards} />
+          
           {/* Filters */}
           <CardFilters onFilterChange={handleFilterChange} banks={banks} />
           
