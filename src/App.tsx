@@ -9,6 +9,19 @@ import CreditCards from "./pages/CreditCards";
 import CardDetail from "./pages/CardDetail";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import Loans from "./pages/Loans";
+import PersonalLoans from "./pages/loans/PersonalLoans";
+import HomeLoans from "./pages/loans/HomeLoans";
+import BusinessLoans from "./pages/loans/BusinessLoans";
+import BNPL from "./pages/BNPL";
+import About from "./pages/About";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import FAQs from "./pages/FAQs";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import Sitemap from "./pages/Sitemap";
+import Apply from "./pages/Apply";
 
 const queryClient = new QueryClient();
 
@@ -22,7 +35,20 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/credit-cards" element={<CreditCards />} />
           <Route path="/credit-cards/:id" element={<CardDetail />} />
+          <Route path="/loans" element={<Loans />} />
+          <Route path="/loans/personal" element={<PersonalLoans />} />
+          <Route path="/loans/home" element={<HomeLoans />} />
+          <Route path="/loans/business" element={<BusinessLoans />} />
+          <Route path="/bnpl" element={<BNPL />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/sitemap" element={<Sitemap />} />
+          <Route path="/apply" element={<Apply />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
