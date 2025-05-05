@@ -1,10 +1,13 @@
 
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/layout/Layout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const Blog = () => {
+  const [activeCategory, setActiveCategory] = useState("All");
+  const navigate = useNavigate();
+  
   // Sample blog posts data
   const blogPosts = [
     {
@@ -59,6 +62,16 @@ const Blog = () => {
 
   const categories = ["All", "Credit Cards", "Loans", "BNPL", "Credit Advice", "Business", "Mortgages"];
 
+  // Filter blog posts by category
+  const filteredPosts = activeCategory === "All" 
+    ? blogPosts 
+    : blogPosts.filter(post => post.category === activeCategory);
+
+  // Handler for clicking on a blog post
+  const handlePostClick = (postId: number) => {
+    navigate(`/blog/${postId}`);
+  };
+
   return (
     <Layout>
       {/* Header Section */}
@@ -82,7 +95,12 @@ const Blog = () => {
               {categories.map((category) => (
                 <button
                   key={category}
-                  className="px-6 py-2 bg-white rounded-full shadow-soft text-slate hover:bg-teal hover:text-white transition-colors"
+                  className={`px-6 py-2 rounded-full shadow-soft transition-colors ${
+                    activeCategory === category 
+                      ? "bg-teal text-white" 
+                      : "bg-white text-slate hover:bg-teal hover:text-white"
+                  }`}
+                  onClick={() => setActiveCategory(category)}
                 >
                   {category}
                 </button>
@@ -91,35 +109,44 @@ const Blog = () => {
           </div>
 
           {/* Featured Post */}
-          <div className="mb-12">
-            <div className="bg-white rounded-lg shadow-soft overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="h-64 md:h-auto bg-gray">
-                  <img
-                    src={blogPosts[0].image}
-                    alt={blogPosts[0].title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-8">
-                  <span className="text-sm text-teal font-medium">{blogPosts[0].category}</span>
-                  <h2 className="text-2xl font-bold mt-2 mb-4">{blogPosts[0].title}</h2>
-                  <p className="text-slate mb-4">{blogPosts[0].excerpt}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate">{blogPosts[0].date}</span>
-                    <Link to={`/blog/${blogPosts[0].id}`} className="text-teal font-medium flex items-center">
-                      Read More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
+          {filteredPosts.length > 0 && (
+            <div className="mb-12">
+              <div 
+                className="bg-white rounded-lg shadow-soft overflow-hidden cursor-pointer transform transition-transform hover:scale-[1.01]" 
+                onClick={() => handlePostClick(filteredPosts[0].id)}
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                  <div className="h-64 md:h-auto bg-gray">
+                    <img
+                      src={filteredPosts[0].image}
+                      alt={filteredPosts[0].title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-8">
+                    <span className="text-sm text-teal font-medium">{filteredPosts[0].category}</span>
+                    <h2 className="text-2xl font-bold mt-2 mb-4">{filteredPosts[0].title}</h2>
+                    <p className="text-slate mb-4">{filteredPosts[0].excerpt}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate">{filteredPosts[0].date}</span>
+                      <Link to={`/blog/${filteredPosts[0].id}`} className="text-teal font-medium flex items-center">
+                        Read More <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Blog Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.slice(1).map((post) => (
-              <div key={post.id} className="bg-white rounded-lg shadow-soft overflow-hidden hover-scale">
+            {filteredPosts.slice(1).map((post) => (
+              <div 
+                key={post.id} 
+                className="bg-white rounded-lg shadow-soft overflow-hidden hover-scale cursor-pointer"
+                onClick={() => handlePostClick(post.id)}
+              >
                 <div className="h-48 bg-gray">
                   <img
                     src={post.image}
@@ -141,6 +168,20 @@ const Blog = () => {
               </div>
             ))}
           </div>
+
+          {/* Empty State - When no posts match filter */}
+          {filteredPosts.length === 0 && (
+            <div className="text-center py-20">
+              <h3 className="text-2xl font-semibold mb-4">No posts found in this category</h3>
+              <p className="text-slate mb-6">Try selecting another category or check back later for new content.</p>
+              <button 
+                className="px-6 py-2 bg-teal text-white rounded-full shadow-soft"
+                onClick={() => setActiveCategory("All")}
+              >
+                View All Posts
+              </button>
+            </div>
+          )}
 
           {/* Pagination */}
           <div className="mt-12 flex justify-center">
