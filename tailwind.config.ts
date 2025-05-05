@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,16 +53,36 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+				// Fintech specific colors
+				navy: {
+					DEFAULT: '#0A2342',
+					light: '#1D3557',
+					dark: '#061A33'
+				},
+				teal: {
+					DEFAULT: '#2A9D8F',
+					light: '#3EB1A4',
+					dark: '#218A7E'
+				},
+				gold: {
+					DEFAULT: '#F8C100',
+					light: '#FFCA28',
+					dark: '#E6B000'
+				},
+				gray: {
+					DEFAULT: '#F8F9FA',
+					light: '#FFFFFF',
+					dark: '#E9ECEF'
+				},
+				slate: {
+					DEFAULT: '#6C757D',
+					light: '#ADB5BD',
+					dark: '#495057'
 				}
+			},
+			fontFamily: {
+				montserrat: ['Montserrat', 'sans-serif'],
+				inter: ['Inter', 'sans-serif']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -69,26 +90,52 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			keyframes: {
-				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+				"accordion-down": {
+					from: { height: "0" },
+					to: { height: "var(--radix-accordion-content-height)" },
 				},
-				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+				"accordion-up": {
+					from: { height: "var(--radix-accordion-content-height)" },
+					to: { height: "0" },
+				},
+				"fade-in": {
+					"0%": { opacity: "0", transform: "translateY(10px)" },
+					"100%": { opacity: "1", transform: "translateY(0)" }
+				},
+				"slide-in": {
+					"0%": { transform: "translateX(-20px)", opacity: "0" },
+					"100%": { transform: "translateX(0)", opacity: "1" }
+				},
+				"scale-in": {
+					"0%": { transform: "scale(0.95)", opacity: "0" },
+					"100%": { transform: "scale(1)", opacity: "1" }
+				},
+				"pulse-soft": {
+					"0%, 100%": { opacity: "1" },
+					"50%": { opacity: "0.8" }
 				}
 			},
 			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				"accordion-down": "accordion-down 0.2s ease-out",
+				"accordion-up": "accordion-up 0.2s ease-out",
+				"fade-in": "fade-in 0.4s ease-out",
+				"slide-in": "slide-in 0.4s ease-out",
+				"scale-in": "scale-in 0.3s ease-out",
+				"pulse-soft": "pulse-soft 2s ease-in-out infinite"
+			},
+			boxShadow: {
+				'soft': '0 4px 20px rgba(0, 0, 0, 0.08)',
+				'card': '0 10px 30px rgba(0, 0, 0, 0.05)',
+				'nav': '0 2px 10px rgba(0, 0, 0, 0.05)',
+				'cta': '0 4px 12px rgba(42, 157, 143, 0.2)',
+				'gold-glow': '0 4px 20px rgba(248, 193, 0, 0.25)'
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-primary': 'linear-gradient(135deg, #0A2342 0%, #1D3557 100%)',
+				'gradient-secondary': 'linear-gradient(135deg, #2A9D8F 0%, #3EB1A4 100%)',
+				'gradient-gold': 'linear-gradient(135deg, #F8C100 0%, #FFCA28 100%)',
+				'card-gradient': 'linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%)'
 			}
 		}
 	},
