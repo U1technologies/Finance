@@ -1,4 +1,3 @@
-
 import React from "react";
 import Layout from "../components/layout/Layout";
 import Hero from "../components/sections/Hero";
@@ -6,6 +5,10 @@ import CreditCard from "../components/ui/CreditCard";
 import TestimonialCard from "../components/ui/TestimonialCard";
 import { Link } from "react-router-dom";
 import { CheckCircle2, TrendingUp, Shield, CreditCard as CardIcon, ArrowRight, ThumbsUp, Award, Clock } from "lucide-react";
+import CardCategories from "../components/ui/CardCategories";
+import FeatureSpotlight from "../components/sections/FeatureSpotlight";
+import AnimatedStats from "../components/sections/AnimatedStats";
+import AnimatedFAQ from "../components/sections/AnimatedFAQ";
 
 const featuredCards = [
   {
@@ -79,6 +82,9 @@ const Index = () => {
         backgroundImage="https://images.unsplash.com/photo-1565514020179-026b92b2d70b?ixlib=rb-1.2.1&auto=format&fit=crop&w=3000&q=80"
       />
 
+      {/* NEW: Animated Stats Section */}
+      <AnimatedStats />
+
       {/* Featured Cards Section */}
       <section className="section-spacing bg-gray">
         <div className="container-wide">
@@ -102,6 +108,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* NEW: Feature Spotlight Section */}
+      <FeatureSpotlight />
 
       {/* Benefits Section */}
       <section className="section-spacing bg-white">
@@ -183,6 +192,13 @@ const Index = () => {
         </div>
       </section>
 
+      {/* NEW: Categories Section */}
+      <section className="section-spacing bg-gray">
+        <div className="container-wide">
+          <CardCategories />
+        </div>
+      </section>
+
       {/* Quick Links Section */}
       <section className="section-spacing bg-gradient-primary text-white">
         <div className="container-wide">
@@ -236,6 +252,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* NEW: FAQ Section */}
+      <AnimatedFAQ />
 
       {/* Testimonials Section */}
       <section className="section-spacing bg-gray">
