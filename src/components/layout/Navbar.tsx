@@ -39,6 +39,17 @@ const Navbar = () => {
       ]
     },
     { name: 'Buy Now Pay Later', path: '/bnpl' },
+    { 
+      name: 'Insurance', 
+      path: '/insurance',
+      submenu: [
+        { name: 'Auto Insurance', path: '/insurance/auto' },
+        { name: 'Home Insurance', path: '/insurance/home' },
+        { name: 'Life Insurance', path: '/insurance/life' },
+        { name: 'Health Insurance', path: '/insurance/health' }
+      ]
+    },
+    { name: 'Credit Score', path: '/credit-score' },
     { name: 'About', path: '/about' },
     { name: 'Blog', path: '/blog' },
     { name: 'Contact', path: '/contact' },

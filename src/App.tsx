@@ -22,6 +22,12 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Sitemap from "./pages/Sitemap";
 import Apply from "./pages/Apply";
+import Insurance from "./pages/Insurance";
+import AutoInsurance from "./pages/insurance/AutoInsurance";
+import HomeInsurance from "./pages/insurance/HomeInsurance";
+import LifeInsurance from "./pages/insurance/LifeInsurance";
+import HealthInsurance from "./pages/insurance/HealthInsurance";
+import CreditScore from "./pages/CreditScore";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +46,12 @@ const App = () => (
           <Route path="/loans/home" element={<HomeLoans />} />
           <Route path="/loans/business" element={<BusinessLoans />} />
           <Route path="/bnpl" element={<BNPL />} />
+          <Route path="/insurance" element={<Insurance />} />
+          <Route path="/insurance/auto" element={<AutoInsurance />} />
+          <Route path="/insurance/home" element={<HomeInsurance />} />
+          <Route path="/insurance/life" element={<LifeInsurance />} />
+          <Route path="/insurance/health" element={<HealthInsurance />} />
+          <Route path="/credit-score" element={<CreditScore />} />
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
