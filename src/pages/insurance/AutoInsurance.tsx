@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Layout from "@/components/layout/Layout";
-import { Shield, ArrowRight, Car, Tool, FileText, BadgePercent } from 'lucide-react';
+import { Shield, ArrowRight, Car, Wrench, FileText, BadgePercent } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -107,7 +107,7 @@ const AutoInsurance = () => {
               transition={{ duration: 0.3 }}
             >
               <div className="h-12 w-12 rounded-full bg-teal/10 flex items-center justify-center mb-4">
-                <Tool className="h-6 w-6 text-teal" />
+                <Wrench className="h-6 w-6 text-teal" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Easy Claims</h3>
               <p className="text-slate text-sm">Simple and hassle-free claims process when you need it.</p>
