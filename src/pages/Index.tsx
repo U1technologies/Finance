@@ -241,7 +241,7 @@ const Index = () => {
             </Link>
 
             {/* Card 4 */}
-            <Link to="/business-loans" className="card-premium hover:translate-y-[-5px] transition-all duration-300 p-6 bg-white text-navy flex flex-col items-center text-center">
+            <Link to="/loans/business" className="card-premium hover:translate-y-[-5px] transition-all duration-300 p-6 bg-white text-navy flex flex-col items-center text-center">
               <Award className="h-12 w-12 text-teal mb-4" />
               <h3 className="text-xl font-semibold mb-2">Business Loans</h3>
               <p className="text-slate mb-4">Grow your business with tailored financing solutions.</p>

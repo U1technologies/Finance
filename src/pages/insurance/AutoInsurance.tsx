@@ -1,9 +1,10 @@
 
 import React from 'react';
 import Layout from "@/components/layout/Layout";
-import { Shield, ArrowRight } from 'lucide-react';
+import { Shield, ArrowRight, Car, Tool, FileText, BadgePercent } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const AutoInsurance = () => {
   return (
@@ -55,7 +56,9 @@ const AutoInsurance = () => {
                 </li>
               </ul>
               <div className="mt-8">
-                <Button className="cta-primary">Get a Quote</Button>
+                <Link to="/apply">
+                  <Button className="cta-primary">Get a Quote</Button>
+                </Link>
               </div>
             </div>
             <div className="rounded-lg overflow-hidden shadow-lg">
@@ -65,6 +68,70 @@ const AutoInsurance = () => {
                 className="w-full h-80 object-cover"
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gray">
+        <div className="container-tight">
+          <h2 className="title-md text-center mb-12">Why Choose Our Auto Insurance</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <motion.div 
+              className="bg-white p-6 rounded-lg shadow-md"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="h-12 w-12 rounded-full bg-teal/10 flex items-center justify-center mb-4">
+                <Car className="h-6 w-6 text-teal" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Tailored Coverage</h3>
+              <p className="text-slate text-sm">Customized plans to fit your vehicle and driving needs.</p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-white p-6 rounded-lg shadow-md"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="h-12 w-12 rounded-full bg-teal/10 flex items-center justify-center mb-4">
+                <BadgePercent className="h-6 w-6 text-teal" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Competitive Rates</h3>
+              <p className="text-slate text-sm">Save money with our affordable premium options.</p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-white p-6 rounded-lg shadow-md"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="h-12 w-12 rounded-full bg-teal/10 flex items-center justify-center mb-4">
+                <Tool className="h-6 w-6 text-teal" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Easy Claims</h3>
+              <p className="text-slate text-sm">Simple and hassle-free claims process when you need it.</p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-white p-6 rounded-lg shadow-md"
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="h-12 w-12 rounded-full bg-teal/10 flex items-center justify-center mb-4">
+                <FileText className="h-6 w-6 text-teal" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">24/7 Support</h3>
+              <p className="text-slate text-sm">Round-the-clock customer service for emergencies.</p>
+            </motion.div>
+          </div>
+          
+          <div className="mt-12 text-center">
+            <Link to="/apply">
+              <Button className="cta-primary">
+                Compare Auto Insurance Quotes <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
