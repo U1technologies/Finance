@@ -38,7 +38,6 @@ const Navbar = () => {
         { name: 'Business Loans', path: '/loans/business' }
       ]
     },
-    { name: 'Buy Now Pay Later', path: '/bnpl' },
     { 
       name: 'Insurance', 
       path: '/insurance',
@@ -50,9 +49,6 @@ const Navbar = () => {
       ]
     },
     { name: 'Credit Score', path: '/credit-score' },
-    { name: 'About', path: '/about' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'Contact', path: '/contact' },
   ];
 
   return (

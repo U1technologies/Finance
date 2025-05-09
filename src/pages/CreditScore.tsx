@@ -1,113 +1,119 @@
 
 import React, { useState } from 'react';
 import Layout from "@/components/layout/Layout";
-import { Calculator, Info, TrendingUp, ArrowRight } from 'lucide-react';
+import { 
+  CreditCard, 
+  Shield, 
+  ArrowRight, 
+  TrendingUp, 
+  Lock, 
+  LineChart, 
+  AlertCircle 
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-import {
+import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
+import { 
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useToast } from "@/components/ui/use-toast";
 
 const CreditScore = () => {
-  const [score, setScore] = useState<number | null>(null);
-  const [sliderValues, setSliderValues] = useState({
-    paymentHistory: 35,
-    creditUtilization: 30,
-    creditAge: 15,
-    inquiries: 10,
+  const [creditScore, setCreditScore] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { toast } = useToast();
+
+  // Credit score calculator form schema
+  const calculatorFormSchema = z.object({
+    age: z.string().min(1, "Age is required"),
+    income: z.string().min(1, "Annual income is required"),
+    creditCards: z.string().min(1, "Number of credit cards is required"),
+    loans: z.string().min(1, "Number of loans is required"),
   });
-  
-  const form = useForm({
+
+  // Lead collection form schema
+  const leadFormSchema = z.object({
+    panCard: z.string().min(10, "PAN Card must be 10 characters").max(10, "PAN Card must be 10 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    mobile: z.string().min(10, "Mobile number must be at least 10 digits"),
+  });
+
+  const calculatorForm = useForm<z.infer<typeof calculatorFormSchema>>({
+    resolver: zodResolver(calculatorFormSchema),
     defaultValues: {
-      latePayments: "none",
-      creditUtilization: "low",
-      creditHistoryYears: "5+",
-      recentInquiries: "0-1",
+      age: "",
+      income: "",
+      creditCards: "0",
+      loans: "0",
     },
   });
 
-  const calculateScore = () => {
-    const { latePayments, creditUtilization, creditHistoryYears, recentInquiries } = form.getValues();
+  const leadForm = useForm<z.infer<typeof leadFormSchema>>({
+    resolver: zodResolver(leadFormSchema),
+    defaultValues: {
+      panCard: "",
+      email: "",
+      mobile: "",
+    },
+  });
+
+  const calculateCreditScore = (data: z.infer<typeof calculatorFormSchema>) => {
+    setLoading(true);
     
-    // Base score starting at 850 (perfect)
-    let calculatedScore = 850;
+    // Simulate API call
+    setTimeout(() => {
+      // Simple algorithm for demo purposes
+      const age = parseInt(data.age);
+      const income = parseInt(data.income);
+      const creditCards = parseInt(data.creditCards);
+      const loans = parseInt(data.loans);
+      
+      let score = 500;
+      
+      // Age factor (older = more stability)
+      if (age > 25) score += 30;
+      if (age > 35) score += 30;
+      if (age > 50) score += 20;
+      
+      // Income factor
+      if (income > 300000) score += 50;
+      if (income > 600000) score += 50;
+      if (income > 1200000) score += 50;
+      
+      // Credit cards factor (2-3 is optimal)
+      if (creditCards >= 1 && creditCards <= 3) score += 50;
+      if (creditCards > 3) score -= 20 * (creditCards - 3);
+      
+      // Loans factor (fewer is better)
+      if (loans === 0) score += 50;
+      if (loans >= 1) score -= 20 * loans;
+      
+      // Ensure score is within range
+      score = Math.max(300, Math.min(score, 850));
+      
+      setCreditScore(score);
+      setLoading(false);
+    }, 1500);
+  };
+  
+  const submitLeadForm = (data: z.infer<typeof leadFormSchema>) => {
+    console.log("Lead form data:", data);
     
-    // Late payments impact
-    if (latePayments === "none") calculatedScore -= 0;
-    else if (latePayments === "one") calculatedScore -= 50;
-    else if (latePayments === "several") calculatedScore -= 100;
-    else if (latePayments === "many") calculatedScore -= 150;
-    
-    // Credit utilization impact
-    if (creditUtilization === "low") calculatedScore -= 0;
-    else if (creditUtilization === "medium") calculatedScore -= 40;
-    else if (creditUtilization === "high") calculatedScore -= 80;
-    else if (creditUtilization === "very-high") calculatedScore -= 120;
-    
-    // Credit history length impact
-    if (creditHistoryYears === "5+") calculatedScore -= 0;
-    else if (creditHistoryYears === "3-5") calculatedScore -= 20;
-    else if (creditHistoryYears === "1-3") calculatedScore -= 40;
-    else if (creditHistoryYears === "less-than-1") calculatedScore -= 60;
-    
-    // Recent inquiries impact
-    if (recentInquiries === "0-1") calculatedScore -= 0;
-    else if (recentInquiries === "2-3") calculatedScore -= 10;
-    else if (recentInquiries === "4+") calculatedScore -= 30;
-    
-    // Ensure score stays within valid range
-    calculatedScore = Math.max(300, Math.min(850, calculatedScore));
-    
-    setScore(calculatedScore);
-    
-    // Animate slider values for the results visualization
-    setSliderValues({
-      paymentHistory: 35,
-      creditUtilization: 30,
-      creditAge: 15,
-      inquiries: 10,
+    toast({
+      title: "Lead submitted successfully!",
+      description: "We'll contact you with personalized credit services soon.",
     });
-  };
-
-  const getScoreCategory = (score: number) => {
-    if (score >= 800) return { category: "Exceptional", color: "text-green-500" };
-    if (score >= 740) return { category: "Very Good", color: "text-emerald-500" };
-    if (score >= 670) return { category: "Good", color: "text-lime-500" };
-    if (score >= 580) return { category: "Fair", color: "text-amber-500" };
-    return { category: "Poor", color: "text-red-500" };
-  };
-
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 }
-    }
+    
+    leadForm.reset();
   };
 
   return (
@@ -115,262 +121,283 @@ const CreditScore = () => {
       <section className="bg-gradient-to-b from-navy to-navy/90 text-white py-24">
         <div className="container-tight pt-20">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="title-lg mb-4">Understand Your Credit Score</h1>
-            <p className="subtitle text-white/80 mb-8">
-              Your credit score is a vital part of your financial health. Calculate your estimated score and learn how to improve it.
-            </p>
+            <motion.h1 
+              className="title-lg mb-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              Check Your Credit Score
+            </motion.h1>
+            <motion.p 
+              className="subtitle text-white/80 mb-8"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              Understand your credit health and get personalized recommendations to improve your score.
+            </motion.p>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="container-tight">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              animate="visible"
-              className="bg-white rounded-xl shadow-lg p-8 border border-slate-100"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <Calculator className="h-8 w-8 text-teal" />
-                <h2 className="text-2xl font-semibold">Credit Score Calculator</h2>
-              </div>
-
-              <Form {...form}>
-                <div className="space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="latePayments"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Late Payments</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select option" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="none">None (Always on time)</SelectItem>
-                            <SelectItem value="one">One (30 days late)</SelectItem>
-                            <SelectItem value="several">Several (30-60 days late)</SelectItem>
-                            <SelectItem value="many">Many (90+ days late)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          Your payment history affects 35% of your score
-                        </FormDescription>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="creditUtilization"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Credit Utilization</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select option" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="low">Low (Less than 10%)</SelectItem>
-                            <SelectItem value="medium">Medium (10-30%)</SelectItem>
-                            <SelectItem value="high">High (30-50%)</SelectItem>
-                            <SelectItem value="very-high">Very High (Above 50%)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          Your debt-to-credit ratio affects 30% of your score
-                        </FormDescription>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="creditHistoryYears"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Length of Credit History</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select option" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="5+">5+ years</SelectItem>
-                            <SelectItem value="3-5">3-5 years</SelectItem>
-                            <SelectItem value="1-3">1-3 years</SelectItem>
-                            <SelectItem value="less-than-1">Less than 1 year</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          The age of your accounts affects 15% of your score
-                        </FormDescription>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="recentInquiries"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Recent Credit Inquiries (Last 12 months)</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select option" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="0-1">0-1 inquiries</SelectItem>
-                            <SelectItem value="2-3">2-3 inquiries</SelectItem>
-                            <SelectItem value="4+">4+ inquiries</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          Recent credit applications affect 10% of your score
-                        </FormDescription>
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button onClick={calculateScore} className="w-full cta-primary">
-                    Calculate My Score
-                  </Button>
-                </div>
-              </Form>
-            </motion.div>
-
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: 0.2 }}
-            >
-              {score ? (
-                <div className="bg-white rounded-xl shadow-lg p-8 border border-slate-100">
-                  <h3 className="text-xl font-semibold mb-4">Your Estimated Credit Score</h3>
-                  
-                  <div className="bg-slate-50 rounded-lg p-6 text-center mb-6">
-                    <div className="text-5xl font-bold mb-2">{score}</div>
-                    <div className={`text-xl ${getScoreCategory(score).color} font-medium`}>
-                      {getScoreCategory(score).category}
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Payment History</span>
-                        <span className="font-medium">35%</span>
-                      </div>
-                      <div className="h-2 bg-slate-200 rounded-full">
-                        <motion.div 
-                          className="h-full bg-teal rounded-full" 
-                          initial={{ width: "0%" }}
-                          animate={{ width: `${sliderValues.paymentHistory}%` }}
-                          transition={{ duration: 0.8 }}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Credit Utilization</span>
-                        <span className="font-medium">30%</span>
-                      </div>
-                      <div className="h-2 bg-slate-200 rounded-full">
-                        <motion.div 
-                          className="h-full bg-teal rounded-full" 
-                          initial={{ width: "0%" }}
-                          animate={{ width: `${sliderValues.creditUtilization}%` }}
-                          transition={{ duration: 0.8, delay: 0.2 }}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Length of Credit History</span>
-                        <span className="font-medium">15%</span>
-                      </div>
-                      <div className="h-2 bg-slate-200 rounded-full">
-                        <motion.div 
-                          className="h-full bg-teal rounded-full" 
-                          initial={{ width: "0%" }}
-                          animate={{ width: `${sliderValues.creditAge}%` }}
-                          transition={{ duration: 0.8, delay: 0.4 }}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Recent Inquiries</span>
-                        <span className="font-medium">10%</span>
-                      </div>
-                      <div className="h-2 bg-slate-200 rounded-full">
-                        <motion.div 
-                          className="h-full bg-teal rounded-full" 
-                          initial={{ width: "0%" }}
-                          animate={{ width: `${sliderValues.inquiries}%` }}
-                          transition={{ duration: 0.8, delay: 0.6 }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6 flex justify-center">
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4" />
-                      <span>View Improvement Tips</span>
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-white rounded-xl shadow-lg p-8 border border-slate-100 flex flex-col items-center justify-center text-center h-full">
-                  <Info className="h-16 w-16 text-slate-300 mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Your Credit Score Results</h3>
-                  <p className="text-slate mb-6">Fill out the calculator to see your estimated credit score and detailed breakdown.</p>
-                </div>
-              )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+              <h2 className="title-md mb-6">Credit Score Calculator</h2>
+              <p className="text-slate mb-6">
+                Fill in the details below to get an estimate of your credit score. This is for demonstration purposes and doesn't reflect your actual credit score.
+              </p>
               
-              <div className="mt-6 grid grid-cols-1 gap-4">
-                <Card>
-                  <CardHeader className="bg-slate-50">
-                    <CardTitle className="text-lg">Why is this important?</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <p className="text-sm text-slate">
-                      Your credit score affects your ability to get loans, credit cards, and even impacts interest rates you'll be offered.
-                    </p>
+              <Card className="shadow-md border-0">
+                <CardContent className="p-6">
+                  <Form {...calculatorForm}>
+                    <form onSubmit={calculatorForm.handleSubmit(calculateCreditScore)} className="space-y-6">
+                      <FormField
+                        control={calculatorForm.control}
+                        name="age"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Your Age</FormLabel>
+                            <FormControl>
+                              <Input type="number" placeholder="Enter your age" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={calculatorForm.control}
+                        name="income"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Annual Income (₹)</FormLabel>
+                            <FormControl>
+                              <Input type="number" placeholder="Enter your annual income" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={calculatorForm.control}
+                          name="creditCards"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Number of Credit Cards</FormLabel>
+                              <FormControl>
+                                <Input type="number" placeholder="0" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={calculatorForm.control}
+                          name="loans"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Active Loans</FormLabel>
+                              <FormControl>
+                                <Input type="number" placeholder="0" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-teal hover:bg-teal/90 text-white"
+                        disabled={loading}
+                      >
+                        {loading ? "Calculating..." : "Calculate Credit Score"}
+                      </Button>
+                    </form>
+                  </Form>
+                </CardContent>
+              </Card>
+              
+              {creditScore && (
+                <motion.div 
+                  className="mt-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Card className="overflow-hidden border-0 shadow-md">
+                    <div className="bg-teal text-white p-4 text-center">
+                      <h3 className="font-semibold">Your Estimated Credit Score</h3>
+                    </div>
+                    <CardContent className="p-6 text-center">
+                      <div className="flex justify-center mb-4">
+                        <div className="relative h-44 w-44">
+                          <div className="absolute inset-0 rounded-full border-8 border-gray-100"></div>
+                          <motion.div 
+                            className="absolute inset-0 rounded-full border-8 border-teal"
+                            style={{ 
+                              borderColor: creditScore < 550 ? '#ef4444' : creditScore < 700 ? '#f59e0b' : '#10b981',
+                              pathLength: (creditScore - 300) / 550
+                            }}
+                            initial={{ pathLength: 0 }}
+                            animate={{ pathLength: (creditScore - 300) / 550 }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                          ></motion.div>
+                          <div className="absolute inset-0 flex items-center justify-center flex-col">
+                            <motion.span 
+                              className="text-4xl font-bold"
+                              initial={{ scale: 0.5, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.5, duration: 0.5 }}
+                            >
+                              {creditScore}
+                            </motion.span>
+                            <span className="text-sm text-slate">out of 850</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-left mt-6">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-slate">Poor</span>
+                          <span className="text-sm text-slate">Excellent</span>
+                        </div>
+                        <div className="h-2 w-full bg-gray-100 rounded-full">
+                          <motion.div 
+                            className="h-full rounded-full"
+                            style={{ 
+                              width: `${((creditScore - 300) / 550) * 100}%`,
+                              backgroundColor: creditScore < 550 ? '#ef4444' : creditScore < 700 ? '#f59e0b' : '#10b981'
+                            }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${((creditScore - 300) / 550) * 100}%` }}
+                            transition={{ duration: 1, ease: "easeOut" }}
+                          ></motion.div>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 text-left">
+                        <h4 className="font-semibold mb-2">
+                          {creditScore < 550 ? 'Poor Credit Score' : creditScore < 700 ? 'Fair Credit Score' : 'Good Credit Score'}
+                        </h4>
+                        <p className="text-slate text-sm">
+                          {creditScore < 550 
+                            ? 'Your credit score needs improvement. Consider reducing debt and making on-time payments.'
+                            : creditScore < 700 
+                              ? 'Your credit score is fair. Continue making payments on time and reduce high-interest debt.'
+                              : 'Congratulations! You have a good credit score. Keep up the good financial habits.'}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </div>
+            
+            <div>
+              <div className="sticky top-24">
+                <h2 className="title-md mb-6">Get Personalized Credit Advice</h2>
+                <p className="text-slate mb-6">
+                  Provide your details below and our credit experts will contact you with customized recommendations to improve your credit score.
+                </p>
+                
+                <Card className="bg-white shadow-lg border-0 overflow-hidden">
+                  <div className="bg-teal text-white p-4">
+                    <h3 className="font-semibold">Credit Services Lead Form</h3>
+                  </div>
+                  <CardContent className="p-6">
+                    <Form {...leadForm}>
+                      <form onSubmit={leadForm.handleSubmit(submitLeadForm)} className="space-y-6">
+                        <FormField
+                          control={leadForm.control}
+                          name="panCard"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>PAN Card</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter PAN Card number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={leadForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email Address</FormLabel>
+                              <FormControl>
+                                <Input type="email" placeholder="Enter your email" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={leadForm.control}
+                          name="mobile"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Mobile Number</FormLabel>
+                              <FormControl>
+                                <Input type="tel" placeholder="Enter your mobile number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <Button 
+                          type="submit" 
+                          className="w-full bg-teal hover:bg-teal/90 text-white"
+                        >
+                          Submit <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </form>
+                    </Form>
+                    
+                    <div className="flex items-center justify-center mt-6 text-slate text-xs">
+                      <Lock className="h-3 w-3 mr-1" />
+                      <span>Your information is secure and will not be shared</span>
+                    </div>
                   </CardContent>
                 </Card>
                 
-                <Card>
-                  <CardHeader className="bg-slate-50">
-                    <CardTitle className="text-lg">Want the real score?</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <p className="text-sm text-slate mb-4">
-                      Our calculator provides an estimate. For your actual score, we recommend checking with credit bureaus.
-                    </p>
-                    <Button variant="link" className="flex items-center p-0 h-auto">
-                      Learn more about credit reports
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
+                <div className="mt-8 bg-teal/5 rounded-lg p-6">
+                  <h3 className="font-semibold mb-4 flex items-center">
+                    <Shield className="h-5 w-5 mr-2 text-teal" />
+                    Why Check Your Credit Score?
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <TrendingUp className="h-5 w-5 text-teal mr-2 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-slate">Get better interest rates on loans and credit cards</span>
+                    </li>
+                    <li className="flex items-start">
+                      <CreditCard className="h-5 w-5 text-teal mr-2 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-slate">Qualify for higher credit limits and premium cards</span>
+                    </li>
+                    <li className="flex items-start">
+                      <LineChart className="h-5 w-5 text-teal mr-2 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-slate">Track your financial health and progress over time</span>
+                    </li>
+                    <li className="flex items-start">
+                      <AlertCircle className="h-5 w-5 text-teal mr-2 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-slate">Identify areas for improvement in your financial habits</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
