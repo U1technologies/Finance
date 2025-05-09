@@ -39,17 +39,18 @@ const Footer = () => {
             <ul className="space-y-3">
               <li><Link to="/credit-cards" className="text-slate-light hover:text-white transition-colors">Credit Cards</Link></li>
               <li><Link to="/loans" className="text-slate-light hover:text-white transition-colors">Loans</Link></li>
-              <li><Link to="/bnpl" className="text-slate-light hover:text-white transition-colors">Buy Now Pay Later</Link></li>
               <li><Link to="/business-loans" className="text-slate-light hover:text-white transition-colors">Business Loans</Link></li>
-              <li><Link to="/about" className="text-slate-light hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/credit-score" className="text-slate-light hover:text-white transition-colors">Credit Score</Link></li>
+              <li><Link to="/insurance" className="text-slate-light hover:text-white transition-colors">Insurance</Link></li>
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Credit Tools */}
           <div>
-            <h3 className="text-lg font-semibold mb-5">Resources</h3>
+            <h3 className="text-lg font-semibold mb-5">Credit Tools</h3>
             <ul className="space-y-3">
-              <li><Link to="/blog" className="text-slate-light hover:text-white transition-colors">Blog</Link></li>
+              <li><Link to="/credit-score/calculator" className="text-slate-light hover:text-white transition-colors">Credit Score Calculator</Link></li>
+              <li><Link to="/credit-score/personalizer" className="text-slate-light hover:text-white transition-colors">Credit Score Personalizer</Link></li>
               <li><Link to="/faqs" className="text-slate-light hover:text-white transition-colors">FAQs</Link></li>
               <li><Link to="/terms" className="text-slate-light hover:text-white transition-colors">Terms & Conditions</Link></li>
               <li><Link to="/privacy" className="text-slate-light hover:text-white transition-colors">Privacy Policy</Link></li>

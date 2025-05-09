@@ -23,6 +23,8 @@ import FAQs from "./pages/FAQs";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Sitemap from "./pages/Sitemap";
+import CreditScoreCalculator from "./pages/CreditScoreCalculator";
+import CreditScorePersonalizer from "./pages/CreditScorePersonalizer";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +49,8 @@ const App = () => (
           <Route path="/insurance/life" element={<LifeInsurance />} />
           <Route path="/insurance/health" element={<HealthInsurance />} />
           <Route path="/credit-score" element={<CreditScore />} />
+          <Route path="/credit-score/calculator" element={<CreditScoreCalculator />} />
+          <Route path="/credit-score/personalizer" element={<CreditScorePersonalizer />} />
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
