@@ -4,7 +4,12 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-const Layout = ({ children, transparentHeader = false }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+  transparentHeader?: boolean;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children, transparentHeader = false }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
