@@ -1,4 +1,3 @@
-
 import React from "react";
 import Layout from "../components/layout/Layout";
 import Hero from "../components/sections/Hero";
@@ -83,7 +82,7 @@ const Index = () => {
         backgroundImage="https://images.unsplash.com/photo-1565514020179-026b92b2d70b?ixlib=rb-1.2.1&auto=format&fit=crop&w=3000&q=80"
       />
 
-      {/* Animated Stats Section */}
+      {/* NEW: Animated Stats Section */}
       <AnimatedStats />
 
       {/* Featured Cards Section */}
@@ -110,7 +109,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Feature Spotlight Section */}
+      {/* NEW: Feature Spotlight Section */}
       <FeatureSpotlight />
 
       {/* Benefits Section */}
@@ -193,7 +192,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* NEW: Categories Section */}
       <section className="section-spacing bg-gray">
         <div className="container-wide">
           <CardCategories />
@@ -254,7 +253,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* NEW: FAQ Section */}
       <AnimatedFAQ />
 
       {/* Testimonials Section */}
